@@ -14,7 +14,7 @@ import javax.persistence.Persistence;
  */
 public class ProjectEntityManager {
 
-    private static final String PERSISTENCE_UNIT_NAME = "tesilm_manytopics";
+    private static final String PERSISTENCE_UNIT_NAME = "wespeak_sperimental";
     private volatile static EntityManager em = null;
 
     private ProjectEntityManager() {

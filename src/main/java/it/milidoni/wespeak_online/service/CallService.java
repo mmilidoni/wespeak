@@ -6,18 +6,36 @@
 package it.milidoni.wespeak_online.service;
 
 import it.milidoni.wespeak_online.ProjectEntityManager;
+import it.milidoni.wespeak_online.entity.Call;
 import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
-public class TopicService extends CRUDService {
+public class CallService extends CRUDService {
 
-    public TopicService() {
-        super(ProjectEntityManager.getEntityManager(), TopicService.class);
+    public CallService() {
+        super(ProjectEntityManager.getEntityManager(), CallService.class);
+    }
+
+    public void book(int idCall, int idInterlocutor, String interlocutorComment) throws ServiceException {
+        Call c = read(idCall);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Call unbook(int idCall) throws ServiceException {
+        Call c = read(idCall);
+        c.setInterlocutor(null);
+        c.setInterlocutorComment(null);
+        return update(c);
+    }
+
+    public List<Call> listNextCalls(int idUser) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.        
     }
 
     @Override
@@ -64,5 +82,5 @@ public class TopicService extends CRUDService {
     public void bind(Object o, Object o1, HashMap<String, Object> hm) throws ServiceException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

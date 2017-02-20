@@ -6,18 +6,28 @@
 package it.milidoni.wespeak_online.service;
 
 import it.milidoni.wespeak_online.ProjectEntityManager;
+import it.milidoni.wespeak_online.entity.Resource;
 import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
+import it.zenitlab.util.criteria.FilterCondition;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
-public class TopicService extends CRUDService {
+public class ResourceService extends CRUDService {
 
-    public TopicService() {
-        super(ProjectEntityManager.getEntityManager(), TopicService.class);
+    public ResourceService() {
+        super(ProjectEntityManager.getEntityManager(), ResourceService.class);
+    }
+
+    public List<Resource> listByTopicId(int idTopic) throws ServiceException {
+        ArrayList<FilterCondition> fc = new ArrayList();
+        fc.add(new FilterCondition("Topic.id", FilterCondition.EQ, idTopic, false));
+        return list(fc, null);
     }
 
     @Override
@@ -64,5 +74,5 @@ public class TopicService extends CRUDService {
     public void bind(Object o, Object o1, HashMap<String, Object> hm) throws ServiceException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }
