@@ -1,16 +1,30 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2017 Michele Milidoni <michelemilidoni@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package it.milidoni.wespeak_online.service;
 
 import it.milidoni.wespeak_online.ProjectEntityManager;
 import it.milidoni.wespeak_online.entity.Call;
+import it.milidoni.wespeak_online.entity.User;
 import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.Query;
 
 /**
  *
@@ -19,7 +33,7 @@ import java.util.List;
 public class CallService extends CRUDService {
 
     public CallService() {
-        super(ProjectEntityManager.getEntityManager(), CallService.class);
+        super(ProjectEntityManager.getEntityManager(), Call.class);
     }
 
     public void book(int idCall, int idInterlocutor, String interlocutorComment) throws ServiceException {
@@ -34,6 +48,21 @@ public class CallService extends CRUDService {
         return update(c);
     }
 
+    public List<User> listFromTopicId(int idTopic) {
+        List<User> l = null;
+        Query q = em.createQuery(""
+                + "SELECT u "
+                + "FROM Call u "
+                + "WHERE u.topic.id = :idTopic");
+        q.setParameter("idTopic", idTopic);
+        try {
+            l = q.getResultList();
+        } catch (Exception ex) {
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return l;
+    }
+    
     public List<Call> listNextCalls(int idUser) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.        
     }

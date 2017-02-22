@@ -1,7 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2017 Michele Milidoni <michelemilidoni@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package it.milidoni.wespeak_online.service;
 
@@ -21,7 +31,7 @@ import java.util.List;
 public class ResourceService extends CRUDService {
 
     public ResourceService() {
-        super(ProjectEntityManager.getEntityManager(), ResourceService.class);
+        super(ProjectEntityManager.getEntityManager(), Resource.class);
     }
 
     public List<Resource> listByTopicId(int idTopic) throws ServiceException {
@@ -32,47 +42,44 @@ public class ResourceService extends CRUDService {
 
     @Override
     public void validate(Object o, int i, HashMap<String, Object> hm) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void beforePersist(Object o, HashMap<String, Object> hm) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void afterPersist(Object o, HashMap<String, Object> hm) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void beforeMerge(Object o, HashMap<String, Object> hm) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void afterMerge(Object o, HashMap<String, Object> hm) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void beforeRemove(Object o, HashMap<String, Object> hm) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void afterRemove(Object o, HashMap<String, Object> hm) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void checkRemovable(Object o, HashMap<String, Object> hm) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void bind(Object o, Object o1, HashMap<String, Object> hm) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Resource s = (Resource) o;
+        Resource t = (Resource) o1;
+        t.setId(s.getId());
+        t.setName(s.getName());
+        t.setTopic(s.getTopic());
+        t.setUri(s.getUri());
     }
 
 }

@@ -16,22 +16,20 @@
 package it.milidoni.wespeak_online.service;
 
 import it.milidoni.wespeak_online.ProjectEntityManager;
-import it.milidoni.wespeak_online.entity.Timezone;
-import it.milidoni.wespeak_online.entity.Topic;
+import it.milidoni.wespeak_online.entity.Country;
 import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
 import java.util.HashMap;
 import java.util.List;
-import javax.persistence.Query;
 
 /**
  *
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
-public class TopicService extends CRUDService {
+public class CountryService extends CRUDService {
 
-    public TopicService() {
-        super(ProjectEntityManager.getEntityManager(), Topic.class);
+    public CountryService() {
+        super(ProjectEntityManager.getEntityManager(), Country.class);
     }
 
     @Override
@@ -64,19 +62,28 @@ public class TopicService extends CRUDService {
 
     @Override
     public void checkRemovable(Object o, HashMap<String, Object> hm) throws ServiceException {
-        Topic tz = (Topic) o;
-        CallService us = new CallService();
-        List l = us.listFromTopicId(tz.getId());
+        Country c = (Country) o;
+        UserService us = new UserService();
+        List l = us.listFromCountryId(c.getId());
         if (l != null && !l.isEmpty()) {
-            throw new ServiceException("The topic is linked to some calls");
+            throw new ServiceException("The country is linked to some users");
         }
     }
 
     @Override
     public void bind(Object o, Object o1, HashMap<String, Object> hm) throws ServiceException {
-        Topic s = (Topic) o;
-        Topic t = (Topic) o1;
+        Country s = (Country) o;
+        Country t = (Country) o1;
         t.setId(s.getId());
+        t.setCode2l(s.getCode2l());
+        t.setCode3l(s.getCode3l());
+        t.setEnabled(s.getEnabled());
+        t.setFlag128(s.getFlag128());
+        t.setFlag32(s.getFlag32());
+        t.setLatitude(s.getLatitude());
+        t.setLongitude(s.getLongitude());
         t.setName(s.getName());
+        t.setNameOfficial(s.getNameOfficial());
+        t.setZoom(s.getZoom());
     }
 }
