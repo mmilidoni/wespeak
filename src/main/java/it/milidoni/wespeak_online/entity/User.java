@@ -251,11 +251,11 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public List<User> getUserList() {
+    public List<User> getFavouriteUsers() {
         return userList;
     }
 
-    public void setUserList(List<User> userList) {
+    public void setFavouriteUsers(List<User> userList) {
         this.userList = userList;
     }
 
@@ -269,11 +269,11 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public List<Topic> getTopicList() {
+    public List<Topic> getFavouriteTopics() {
         return topicList;
     }
 
-    public void setTopicList(List<Topic> topicList) {
+    public void setFavouriteTopics(List<Topic> topicList) {
         this.topicList = topicList;
     }
 

@@ -15,6 +15,9 @@
  */
 package it.milidoni.wespeak_online.service;
 
+import it.milidoni.wespeak_online.ProjectEntityManager;
+import javax.persistence.EntityManager;
+
 /**
  *
  * @author Michele Milidoni <michelemilidoni@gmail.com>
@@ -23,6 +26,15 @@ public class TestListener extends org.junit.runner.notification.RunListener {
 
     public TestListener() {
         System.out.println("TestListener");
+        String[] tables = {"resource", "call", "topic", "user"};
+        EntityManager em = ProjectEntityManager.getTestEntityManager();
+        em.getTransaction().begin();
+        for (String table : tables) {
+            em.createNativeQuery(
+                    " delete from `" + table + "`"
+            ).executeUpdate();
+        }
+        em.getTransaction().commit();
     }
-    
+
 }

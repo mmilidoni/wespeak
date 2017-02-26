@@ -43,13 +43,15 @@ public class UserService extends CRUDService {
     }
 
     public User getUser(String email, String password) throws ServiceException {
-        Query q = em.createQuery("select u from User u where email=:email");
+        Query q = em.createQuery("SELECT u FROM User u WHERE u.email = :email");
         q.setParameter("email", email);
         User u = (User) q.getSingleResult();
         if (u != null) {
             try {
-                if (PasswordStorage.verifyPassword(password, PasswordStorage.createHash(u.getPassword()))) {
+                if (PasswordStorage.verifyPassword(password, u.getPassword())) {
                     return u;
+                } else {
+                    return null;
                 }
             } catch (PasswordStorage.CannotPerformOperationException ex) {
                 Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
@@ -58,12 +60,12 @@ public class UserService extends CRUDService {
                 throw new ServiceException("Email o password non validi");
             }
         }
-        throw new ServiceException("Errore generico");
+        return null;
     }
 
     public Boolean hasFavouriteUser(Integer idUserA, Integer idUserB) throws ServiceException {
         User u = read(idUserA);
-        for (User subject : u.getUserList()) {
+        for (User subject : u.getFavouriteUsers()) {
             if (idUserB.equals(subject.getId())) {
                 return true;
             }
@@ -73,7 +75,7 @@ public class UserService extends CRUDService {
 
     public Boolean hasFavouriteTopic(Integer idUser, Integer idTopic) throws ServiceException {
         User u = read(idUser);
-        for (Topic topic : u.getTopicList()) {
+        for (Topic topic : u.getFavouriteTopics()) {
             if (idTopic.equals(topic.getId())) {
                 return true;
             }
@@ -84,23 +86,41 @@ public class UserService extends CRUDService {
     public Boolean toggleFavouriteUser(Integer idUserA, Integer idUserB) throws ServiceException {
         User u = read(idUserA);
         if (hasFavouriteUser(idUserA, idUserB)) {
-            u.getUserList().remove((User) read(idUserB));
+            u.getFavouriteUsers().remove((User) read(idUserB));
         } else {
-            u.getUserList().add((User) read(idUserB));
+            u.getFavouriteUsers().add((User) read(idUserB));
         }
         return em.merge(u) != null;
     }
 
     public Boolean toggleFavouriteTopic(Integer idUser, Integer idTopic) throws ServiceException {
         User u = read(idUser);
-        TopicService ts = new TopicService();
+        TopicService ts = new TopicService(em);
 
         if (hasFavouriteTopic(idUser, idTopic)) {
-            u.getTopicList().remove((Topic) ts.read(idTopic));
+            u.getFavouriteTopics().remove((Topic) ts.read(idTopic));
         } else {
-            u.getTopicList().add((Topic) ts.read(idTopic));
+            u.getFavouriteTopics().add((Topic) ts.read(idTopic));
         }
         return em.merge(u) != null;
+    }
+
+    public boolean changePassword(String email, String currentPassword, String newPassword) throws ServiceException {
+        try {
+            em.getTransaction().begin();
+            User user = getUser(email, currentPassword);
+            if (user == null) {
+                return false;
+            }
+            user.setPassword(PasswordStorage.createHash(newPassword));
+            em.persist(user);
+            em.getTransaction().commit();
+            return true;
+        } catch (PasswordStorage.CannotPerformOperationException e) {
+            em.getTransaction().rollback();
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, e);
+            return false;
+        }
     }
 
     public List<User> listFromTimezoneId(int idTimezone) {
@@ -213,30 +233,5 @@ public class UserService extends CRUDService {
         target.setSex(source.getSex());
         target.setSkypeId(source.getSkypeId());
         target.setTimezone(source.getTimezone());
-    }
-
-    public boolean cambioPassword(String username, String vecchiaPassword, String nuovaPassword) throws ServiceException {
-        em.getTransaction().begin();
-        try {
-            Query q = em.createQuery("select u from Utente u where username=:username and password=:password");
-            q.setParameter("username", username);
-            q.setParameter("password", PasswordStorage.verifyPassword(vecchiaPassword, PasswordStorage.createHash(vecchiaPassword)));
-            List<User> l = q.getResultList();
-            if (l.isEmpty()) {
-                return false;
-            }
-            User u = l.get(0);
-            u.setPassword(PasswordStorage.createHash(nuovaPassword));
-            em.getTransaction().commit();
-            return true;
-        } catch (PasswordStorage.CannotPerformOperationException e) {
-            em.getTransaction().rollback();
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, e);
-            return false;
-        } catch (PasswordStorage.InvalidHashException e) {
-            em.getTransaction().rollback();
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, e);
-            return false;
-        }
     }
 }

@@ -21,6 +21,7 @@ import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
 import java.util.HashMap;
 import java.util.List;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -30,6 +31,10 @@ public class TopicService extends CRUDService {
 
     public TopicService() {
         super(ProjectEntityManager.getEntityManager(), Topic.class);
+    }
+
+    public TopicService(EntityManager em) {
+        super(em, Topic.class);
     }
 
     @Override
