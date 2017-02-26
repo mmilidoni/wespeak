@@ -28,8 +28,10 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -38,31 +40,32 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
 @Entity
+@Table(name = "phone_call")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Call.findAll", query = "SELECT c FROM Call c"),
-    @NamedQuery(name = "Call.findById", query = "SELECT c FROM Call c WHERE c.id = :id"),
-    @NamedQuery(name = "Call.findByDateTime", query = "SELECT c FROM Call c WHERE c.dateTime = :dateTime")})
-public class Call implements Serializable {
+    @NamedQuery(name = "PhoneCall.findAll", query = "SELECT p FROM PhoneCall p"),
+    @NamedQuery(name = "PhoneCall.findById", query = "SELECT p FROM PhoneCall p WHERE p.id = :id"),
+    @NamedQuery(name = "PhoneCall.findByDateTime", query = "SELECT p FROM PhoneCall p WHERE p.dateTime = :dateTime")})
+public class PhoneCall implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @NotNull
     private Integer id;
     @Column(name = "date_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
     @Lob
     @Size(max = 65535)
-    @Column(name = "owner_comment", length = 65535)
+    @Column(name = "owner_comment")
     private String ownerComment;
     @Lob
     @Size(max = 65535)
-    @Column(name = "interlocutor_comment", length = 65535)
+    @Column(name = "interlocutor_comment")
     private String interlocutorComment;
-    @JoinColumn(name = "owner", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "owner", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User owner;
     @JoinColumn(name = "interlocutor", referencedColumnName = "id")
@@ -72,10 +75,10 @@ public class Call implements Serializable {
     @ManyToOne
     private Topic topic;
 
-    public Call() {
+    public PhoneCall() {
     }
 
-    public Call(Integer id) {
+    public PhoneCall(Integer id) {
         this.id = id;
     }
 
@@ -145,10 +148,10 @@ public class Call implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Call)) {
+        if (!(object instanceof PhoneCall)) {
             return false;
         }
-        Call other = (Call) object;
+        PhoneCall other = (PhoneCall) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -157,7 +160,7 @@ public class Call implements Serializable {
 
     @Override
     public String toString() {
-        return "it.milidoni.wespeak_online.entity.Call[ id=" + id + " ]";
+        return "it.milidoni.wespeak_online.entity.PhoneCall[ id=" + id + " ]";
     }
     
 }

@@ -21,6 +21,7 @@ import it.milidoni.wespeak_online.entity.User;
 import it.milidoni.wespeak_online.util.PasswordStorage;
 import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -65,6 +66,9 @@ public class UserService extends CRUDService {
 
     public Boolean hasFavouriteUser(Integer idUserA, Integer idUserB) throws ServiceException {
         User u = read(idUserA);
+        if (u.getFavouriteUsers()== null) {
+            return false;
+        }
         for (User subject : u.getFavouriteUsers()) {
             if (idUserB.equals(subject.getId())) {
                 return true;
@@ -75,6 +79,9 @@ public class UserService extends CRUDService {
 
     public Boolean hasFavouriteTopic(Integer idUser, Integer idTopic) throws ServiceException {
         User u = read(idUser);
+        if (u.getFavouriteTopics() == null) {
+            return false;
+        }
         for (Topic topic : u.getFavouriteTopics()) {
             if (idTopic.equals(topic.getId())) {
                 return true;
@@ -88,6 +95,9 @@ public class UserService extends CRUDService {
         if (hasFavouriteUser(idUserA, idUserB)) {
             u.getFavouriteUsers().remove((User) read(idUserB));
         } else {
+            if (u.getFavouriteUsers() == null) {
+                u.setFavouriteUsers(new ArrayList());
+            }
             u.getFavouriteUsers().add((User) read(idUserB));
         }
         return em.merge(u) != null;
@@ -100,6 +110,9 @@ public class UserService extends CRUDService {
         if (hasFavouriteTopic(idUser, idTopic)) {
             u.getFavouriteTopics().remove((Topic) ts.read(idTopic));
         } else {
+            if (u.getFavouriteTopics() == null) {
+                u.setFavouriteTopics(new ArrayList());
+            }
             u.getFavouriteTopics().add((Topic) ts.read(idTopic));
         }
         return em.merge(u) != null;

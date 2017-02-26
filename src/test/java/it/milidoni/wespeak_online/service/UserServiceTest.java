@@ -19,6 +19,7 @@ import it.milidoni.wespeak_online.ProjectEntityManager;
 import it.milidoni.wespeak_online.entity.Topic;
 import it.milidoni.wespeak_online.entity.User;
 import it.milidoni.wespeak_online.util.PasswordStorage;
+import it.milidoni.wespeak_online.util.TestUtil;
 import it.zenitlab.crudservice.exception.ServiceException;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -36,13 +37,14 @@ import org.junit.Test;
  */
 public class UserServiceTest {
 
-    EntityManager em = ProjectEntityManager.getTestEntityManager();
+    private static final EntityManager em = ProjectEntityManager.getTestEntityManager();
 
     public UserServiceTest() {
     }
 
     @BeforeClass
     public static void setUpClass() {
+        TestUtil.cleanTables(em);
     }
 
     @AfterClass
@@ -74,7 +76,7 @@ public class UserServiceTest {
         String h1 = PasswordStorage.createHash("test");
         assertTrue(PasswordStorage.verifyPassword("test", h1));
     }
-    
+
     @Test
     public void testGetUser() throws ServiceException {
         UserService instance = new UserService(em);
@@ -145,7 +147,7 @@ public class UserServiceTest {
         // user has not topic as favourite
         Boolean result1 = us.hasFavouriteTopic(user.getId(), topic.getId());
         assertFalse(result1);
-        
+
         // testing toggleFavouriteTopic
         us.toggleFavouriteTopic(user.getId(), topic.getId());
         // user has topic as favourite
@@ -172,13 +174,13 @@ public class UserServiceTest {
         User user = us.create(uTemp);
 
         assertTrue(PasswordStorage.verifyPassword(userPassword, user.getPassword()));
-        
+
         us.changePassword(userEmail, userPassword, userNewPassword);
         user = us.read(user.getId());
         assertFalse(PasswordStorage.verifyPassword(userPassword, user.getPassword()));
         assertTrue(PasswordStorage.verifyPassword(userNewPassword, user.getPassword()));
     }
-    
+
     /**
      * Test of listFromTimezoneId method, of class UserService.
      */

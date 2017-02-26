@@ -68,7 +68,7 @@ public class TopicService extends CRUDService {
     @Override
     public void checkRemovable(Object o, HashMap<String, Object> hm) throws ServiceException {
         Topic tz = (Topic) o;
-        CallService us = new CallService();
+        PhoneCallService us = new PhoneCallService();
         List l = us.listFromTopicId(tz.getId());
         if (l != null && !l.isEmpty()) {
             throw new ServiceException("The topic is linked to some calls");

@@ -19,7 +19,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +31,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -118,10 +116,6 @@ public class User implements Serializable {
         @JoinColumn(name = "topic", referencedColumnName = "id", nullable = false)})
     @ManyToMany
     private List<Topic> topicList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private List<Call> callList;
-    @OneToMany(mappedBy = "interlocutor")
-    private List<Call> callList1;
     @JoinColumn(name = "timezone", referencedColumnName = "id")
     @ManyToOne
     private Timezone timezone;
@@ -275,24 +269,6 @@ public class User implements Serializable {
 
     public void setFavouriteTopics(List<Topic> topicList) {
         this.topicList = topicList;
-    }
-
-    @XmlTransient
-    public List<Call> getCallList() {
-        return callList;
-    }
-
-    public void setCallList(List<Call> callList) {
-        this.callList = callList;
-    }
-
-    @XmlTransient
-    public List<Call> getCallList1() {
-        return callList1;
-    }
-
-    public void setCallList1(List<Call> callList1) {
-        this.callList1 = callList1;
     }
 
     public Timezone getTimezone() {

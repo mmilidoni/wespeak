@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.milidoni.wespeak_online.service;
+package it.milidoni.wespeak_online.util;
 
-import it.milidoni.wespeak_online.ProjectEntityManager;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
-public class TestListener extends org.junit.runner.notification.RunListener {
+public class TestUtil {
 
-    public TestListener() {
-        System.out.println("TestListener");
-        String[] tables = {"resource", "call", "topic", "user"};
-        EntityManager em = ProjectEntityManager.getTestEntityManager();
+    public static void cleanTables(EntityManager em) {
+        System.out.print("Cleaning tables... ");
+        String[] tables = {"resource", "phone_call", "topic", "user"};
         em.getTransaction().begin();
         for (String table : tables) {
             em.createNativeQuery(
@@ -35,6 +33,6 @@ public class TestListener extends org.junit.runner.notification.RunListener {
             ).executeUpdate();
         }
         em.getTransaction().commit();
+        System.out.println("done!");
     }
-
 }
