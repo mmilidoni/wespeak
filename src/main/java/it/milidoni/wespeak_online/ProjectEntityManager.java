@@ -25,7 +25,9 @@ import javax.persistence.Persistence;
 public class ProjectEntityManager {
 
     private static final String PERSISTENCE_UNIT_NAME = "wespeak_sperimental";
+    private static final String PERSISTENCE_TEST_UNIT_NAME = "wespeak_sperimental_test";
     private volatile static EntityManager em = null;
+    private volatile static EntityManager emTest = null;
 
     private ProjectEntityManager() {
     }
@@ -40,5 +42,16 @@ public class ProjectEntityManager {
             }
         }
         return em;
+    }
+
+    public static EntityManager getTestEntityManager() {
+        if (emTest == null) {
+            synchronized (ProjectEntityManager.class) {
+                if (emTest == null) {
+                    emTest = Persistence.createEntityManagerFactory(PERSISTENCE_TEST_UNIT_NAME).createEntityManager();
+                }
+            }
+        }
+        return emTest;
     }
 }

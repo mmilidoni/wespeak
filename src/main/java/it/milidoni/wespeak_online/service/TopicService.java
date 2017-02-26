@@ -16,13 +16,11 @@
 package it.milidoni.wespeak_online.service;
 
 import it.milidoni.wespeak_online.ProjectEntityManager;
-import it.milidoni.wespeak_online.entity.Timezone;
 import it.milidoni.wespeak_online.entity.Topic;
 import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
 import java.util.HashMap;
 import java.util.List;
-import javax.persistence.Query;
 
 /**
  *

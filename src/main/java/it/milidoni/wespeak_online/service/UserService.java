@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 /**
@@ -35,6 +36,10 @@ public class UserService extends CRUDService {
 
     public UserService() {
         super(ProjectEntityManager.getEntityManager(), User.class);
+    }
+
+    public UserService(EntityManager em) {
+        super(em, User.class);
     }
 
     public User getUser(String email, String password) throws ServiceException {

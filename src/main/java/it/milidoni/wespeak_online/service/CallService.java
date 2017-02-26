@@ -35,10 +35,13 @@ public class CallService extends CRUDService {
     public CallService() {
         super(ProjectEntityManager.getEntityManager(), Call.class);
     }
-
-    public void book(int idCall, int idInterlocutor, String interlocutorComment) throws ServiceException {
+    
+    public Call book(int idCall, int idInterlocutor, String interlocutorComment) throws ServiceException {
         Call c = read(idCall);
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        UserService us = new UserService();
+        c.setInterlocutor((User) us.read(idInterlocutor));
+        c.setInterlocutorComment(interlocutorComment);
+        return update(c);
     }
 
     public Call unbook(int idCall) throws ServiceException {
