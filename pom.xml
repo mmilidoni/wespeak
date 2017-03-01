@@ -86,6 +86,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -96,11 +97,15 @@
             <artifactId>crud-service</artifactId>
             <version>2.04</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.glassfish.metro/webservices-rt -->
         <dependency>
-            <groupId>org.glassfish.metro</groupId>
-            <artifactId>webservices-rt</artifactId>
-            <version>2.3.1</version>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-core</artifactId>
+            <version>2.5.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-json-plugin</artifactId>
+            <version>2.5.10</version>
         </dependency>
     </dependencies>
 
