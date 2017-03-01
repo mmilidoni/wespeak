@@ -1,4 +1,5 @@
 persistence.xml
+context.xml
 
 /target/
 
