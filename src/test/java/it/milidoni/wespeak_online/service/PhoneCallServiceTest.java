@@ -86,36 +86,20 @@ public class PhoneCallServiceTest {
     public void testActivate() {
         PhoneCallService cs = new PhoneCallService(em);
 
-        PhoneCall call = new PhoneCall();
-
         GregorianCalendar gc = new GregorianCalendar();
-
-        gc.add(GregorianCalendar.MINUTE, -3);
-
-        call.setDateTime(gc.getTime());
-        call.setTopic(topic);
-        call.setOwner(owner);
-        try {
-            cs.create(call);
-            assertTrue(false);
-        } catch (ServiceException ex) {
-            Logger.getLogger(PhoneCallServiceTest.class.getName()).log(Level.SEVERE, null, ex);
-            assertTrue(true);
-        }
-
-        gc = new GregorianCalendar();
         gc.add(GregorianCalendar.MONTH, 3);
 
-        call = new PhoneCall();
+        PhoneCall call = new PhoneCall();
         call.setDateTime(gc.getTime());
         call.setTopic(topic);
         call.setOwner(owner);
         try {
             cs.create(call);
-            PhoneCall callTest = cs.read(call.getId());
-            assertEquals(call.getId(), callTest.getId());
-            assertEquals(call.getTopic().getId(), callTest.getTopic().getId());
-            assertTrue(callTest.getDateTime().getTime() > 0);
+            PhoneCall callTest = cs.activate(call.getId(), owner.getId(),
+                    topic.getId(), gc.getTime());
+            assertTrue(call.getId().equals(callTest.getId())
+                    && call.getTopic().getId().equals(callTest.getTopic().getId())
+                    && callTest.getDateTime().getTime() > 0);
         } catch (ServiceException ex) {
             Logger.getLogger(PhoneCallServiceTest.class.getName()).log(Level.SEVERE, null, ex);
             assertTrue(false);
@@ -123,7 +107,7 @@ public class PhoneCallServiceTest {
     }
 
     @Test
-    public void testDeactivate() throws ServiceException {
+    public void testDeactivate() {
         PhoneCallService cs = new PhoneCallService(em);
         PhoneCall call = new PhoneCall();
         GregorianCalendar gc = new GregorianCalendar();
@@ -131,43 +115,65 @@ public class PhoneCallServiceTest {
         call.setDateTime(new Date(gc.getTimeInMillis()));
         call.setTopic(topic);
         call.setOwner(owner);
-        cs.create(call);
-        PhoneCall callTest = cs.read(call.getId());
-        assertTrue(callTest.getId() > 0);
-        cs.delete(call.getId());
         try {
-            cs.read(call.getId());
-        } catch (PersistenceException ex) {
-            assertTrue(true);
+            cs.create(call);
+        } catch (ServiceException ex) {
+            Logger.getLogger(PhoneCallServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse(true);
+        }
+
+        try {
+            PhoneCall callTest = cs.deactivate(call.getId());
+            assertNotNull(callTest);
+        } catch (ServiceException ex) {
+            Logger.getLogger(PhoneCallServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse(true);
         }
     }
 
-    @Ignore
     @Test
-    public void testBook() throws Exception {
-        System.out.println("book");
-        int idCall = 0;
-        int idInterlocutor = 0;
-        String interlocutorComment = "";
-        PhoneCallService instance = new PhoneCallService(em);
-        PhoneCall expResult = null;
-        PhoneCall result = instance.book(idCall, idInterlocutor, interlocutorComment);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testBook() {
+        PhoneCallService cs = new PhoneCallService(em);
+
+        PhoneCall call = new PhoneCall();
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.add(GregorianCalendar.MONTH, 3);
+
+        call.setDateTime(gc.getTime());
+        call.setTopic(topic);
+        call.setOwner(owner);
+        try {
+            call = cs.create(call);
+            call = cs.book(call.getId(), interlocutor.getId(), "comments");
+            assertTrue(call.getId() > 0
+                    && call.getInterlocutor().getId() > 0
+                    && !call.getInterlocutorComment().isEmpty());
+        } catch (ServiceException ex) {
+            Logger.getLogger(PhoneCallServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse(true);
+        }
     }
 
-    @Ignore
     @Test
     public void testUnbook() throws Exception {
-        System.out.println("unbook");
-        int idCall = 0;
-        PhoneCallService instance = new PhoneCallService(em);
-        PhoneCall expResult = null;
-        PhoneCall result = instance.unbook(idCall);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        PhoneCallService cs = new PhoneCallService(em);
+
+        PhoneCall call = new PhoneCall();
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.add(GregorianCalendar.MONTH, 3);
+
+        call.setDateTime(gc.getTime());
+        call.setTopic(topic);
+        call.setOwner(owner);
+        try {
+            call = cs.create(call);
+            call = cs.unbook(call.getId());
+            assertNull(call.getInterlocutor());
+            assertNull(call.getInterlocutorComment());
+        } catch (ServiceException ex) {
+            Logger.getLogger(PhoneCallServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse(true);
+        }
     }
 
     @Ignore

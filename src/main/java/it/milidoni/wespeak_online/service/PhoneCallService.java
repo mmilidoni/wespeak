@@ -20,6 +20,7 @@ import it.milidoni.wespeak_online.entity.PhoneCall;
 import it.milidoni.wespeak_online.entity.User;
 import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -42,9 +43,25 @@ public class PhoneCallService extends CRUDService {
         super(em, PhoneCall.class);
     }
 
+    public PhoneCall activate(Integer idPhoneCall, Integer idOwner,
+            Integer idTopic, Date date) throws ServiceException {
+        PhoneCall call = read(idPhoneCall);
+        TopicService ts = new TopicService(em);
+        UserService us = new UserService(em);
+        call.setDateTime(date);
+        call.setTopic(ts.read(idTopic));
+        call.setOwner(us.read(idOwner));
+
+        return update(call);
+    }
+
+    public PhoneCall deactivate(Integer idPhoneCall) throws ServiceException {
+        return (PhoneCall) delete(idPhoneCall);
+    }
+
     public PhoneCall book(int idCall, int idInterlocutor, String interlocutorComment) throws ServiceException {
         PhoneCall c = read(idCall);
-        UserService us = new UserService();
+        UserService us = new UserService(em);
         c.setInterlocutor((User) us.read(idInterlocutor));
         c.setInterlocutorComment(interlocutorComment);
         return update(c);
