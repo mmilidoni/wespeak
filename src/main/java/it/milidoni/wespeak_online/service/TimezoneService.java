@@ -16,25 +16,20 @@
 package it.milidoni.wespeak_online.service;
 
 import it.milidoni.wespeak_online.ProjectEntityManager;
-import it.milidoni.wespeak_online.entity.Topic;
+import it.milidoni.wespeak_online.entity.Timezone;
 import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
 import java.util.HashMap;
 import java.util.List;
-import javax.persistence.EntityManager;
 
 /**
  *
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
-public class TopicService extends CRUDService {
+public class TimezoneService extends CRUDService {
 
-    public TopicService() {
-        super(ProjectEntityManager.getEntityManager(), Topic.class);
-    }
-
-    public TopicService(EntityManager em) {
-        super(em, Topic.class);
+    public TimezoneService() {
+        super(ProjectEntityManager.getEntityManager(), Timezone.class);
     }
 
     @Override
@@ -67,19 +62,20 @@ public class TopicService extends CRUDService {
 
     @Override
     public void checkRemovable(Object o, HashMap<String, Object> hm) throws ServiceException {
-        Topic tz = (Topic) o;
-        PhoneCallService us = new PhoneCallService();
-        List l = us.listFromTopicId(tz.getId());
+        Timezone tz = (Timezone) o;
+        UserService us = new UserService();
+        List l = us.listFromTimezoneId(tz.getId());
         if (l != null && !l.isEmpty()) {
-            throw new ServiceException("The topic is linked to some calls");
+            throw new ServiceException("The timezone is linked to some users");
         }
     }
 
     @Override
     public void bind(Object o, Object o1, HashMap<String, Object> hm) throws ServiceException {
-        Topic s = (Topic) o;
-        Topic t = (Topic) o1;
+        Timezone s = (Timezone) o;
+        Timezone t = (Timezone) o1;
         t.setId(s.getId());
+        t.setCode21(s.getCode21());
         t.setName(s.getName());
     }
 }

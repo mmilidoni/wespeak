@@ -9,3 +9,6 @@ List of timezones
 -----------------
 [gloriajw/Timezone-Mappings-in-CSV-format (Github)](https://github.com/gloriajw/Timezone-Mappings-in-CSV-format)
 
+PasswordStorage
+---------------
+[defuse/password-hashing (Github)](https://github.com/defuse/password-hashing)

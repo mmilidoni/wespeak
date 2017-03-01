@@ -16,25 +16,28 @@
 package it.milidoni.wespeak_online.service;
 
 import it.milidoni.wespeak_online.ProjectEntityManager;
-import it.milidoni.wespeak_online.entity.Topic;
+import it.milidoni.wespeak_online.entity.Resource;
 import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
+import it.zenitlab.util.criteria.FilterCondition;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.persistence.EntityManager;
 
 /**
  *
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
-public class TopicService extends CRUDService {
+public class ResourceService extends CRUDService {
 
-    public TopicService() {
-        super(ProjectEntityManager.getEntityManager(), Topic.class);
+    public ResourceService() {
+        super(ProjectEntityManager.getEntityManager(), Resource.class);
     }
 
-    public TopicService(EntityManager em) {
-        super(em, Topic.class);
+    public List<Resource> listByTopicId(int idTopic) throws ServiceException {
+        ArrayList<FilterCondition> fc = new ArrayList();
+        fc.add(new FilterCondition("Topic.id", FilterCondition.EQ, idTopic, false));
+        return list(fc, null);
     }
 
     @Override
@@ -67,19 +70,16 @@ public class TopicService extends CRUDService {
 
     @Override
     public void checkRemovable(Object o, HashMap<String, Object> hm) throws ServiceException {
-        Topic tz = (Topic) o;
-        PhoneCallService us = new PhoneCallService();
-        List l = us.listFromTopicId(tz.getId());
-        if (l != null && !l.isEmpty()) {
-            throw new ServiceException("The topic is linked to some calls");
-        }
     }
 
     @Override
     public void bind(Object o, Object o1, HashMap<String, Object> hm) throws ServiceException {
-        Topic s = (Topic) o;
-        Topic t = (Topic) o1;
+        Resource s = (Resource) o;
+        Resource t = (Resource) o1;
         t.setId(s.getId());
         t.setName(s.getName());
+        t.setTopic(s.getTopic());
+        t.setUri(s.getUri());
     }
+
 }

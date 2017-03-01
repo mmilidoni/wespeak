@@ -1,12 +1,21 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2017 Michele Milidoni <michelemilidoni@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package it.milidoni.wespeak_online.entity;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,11 +24,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -50,9 +57,11 @@ public class Timezone implements Serializable {
     @Size(min = 1, max = 1024)
     @Column(nullable = false, length = 1024)
     private String name;
+
+    /*
     @OneToMany(mappedBy = "timezone")
     private List<User> userList;
-
+     */
     public Timezone() {
     }
 
@@ -90,6 +99,7 @@ public class Timezone implements Serializable {
         this.name = name;
     }
 
+    /*
     @XmlTransient
     public List<User> getUserList() {
         return userList;
@@ -98,7 +108,7 @@ public class Timezone implements Serializable {
     public void setUserList(List<User> userList) {
         this.userList = userList;
     }
-
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -123,5 +133,5 @@ public class Timezone implements Serializable {
     public String toString() {
         return "it.milidoni.wespeak_online.entity.Timezone[ id=" + id + " ]";
     }
-    
+
 }

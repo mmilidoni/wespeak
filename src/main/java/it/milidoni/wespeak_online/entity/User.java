@@ -1,7 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2017 Michele Milidoni <michelemilidoni@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package it.milidoni.wespeak_online.entity;
 
@@ -9,7 +19,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +31,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,7 +45,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
 @Entity
-@Table(uniqueConstraints = {
+@Table(name = "user", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})})
 @XmlRootElement
 @NamedQueries({
@@ -108,10 +116,6 @@ public class User implements Serializable {
         @JoinColumn(name = "topic", referencedColumnName = "id", nullable = false)})
     @ManyToMany
     private List<Topic> topicList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private List<Call> callList;
-    @OneToMany(mappedBy = "interlocutor")
-    private List<Call> callList1;
     @JoinColumn(name = "timezone", referencedColumnName = "id")
     @ManyToOne
     private Timezone timezone;
@@ -241,11 +245,11 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public List<User> getUserList() {
+    public List<User> getFavouriteUsers() {
         return userList;
     }
 
-    public void setUserList(List<User> userList) {
+    public void setFavouriteUsers(List<User> userList) {
         this.userList = userList;
     }
 
@@ -259,30 +263,12 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public List<Topic> getTopicList() {
+    public List<Topic> getFavouriteTopics() {
         return topicList;
     }
 
-    public void setTopicList(List<Topic> topicList) {
+    public void setFavouriteTopics(List<Topic> topicList) {
         this.topicList = topicList;
-    }
-
-    @XmlTransient
-    public List<Call> getCallList() {
-        return callList;
-    }
-
-    public void setCallList(List<Call> callList) {
-        this.callList = callList;
-    }
-
-    @XmlTransient
-    public List<Call> getCallList1() {
-        return callList1;
-    }
-
-    public void setCallList1(List<Call> callList1) {
-        this.callList1 = callList1;
     }
 
     public Timezone getTimezone() {
