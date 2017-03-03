@@ -1,0 +1,97 @@
+/*-----------------------------------------------------------------------------------
+ *
+ *  Theme Name: Anant | Multipurpose HTML Template
+ *  Theme URI: http://anant.revivalpixel.com/html/index.html
+ *  Author:HTML Pixel
+ *  Author URI: http://www.revivalpixel.com/
+ *  Description: Anant | Multipurpose HTML Template is a perfect design for Creative Agency, Corporation, Organization, Community, Company Profile, Personal Portfolio, News, Creative Blog, Gallery Photo and many more.
+ *  Version: 1.0
+ *
+ *---------------------------------------------------------------------------------------
+
+.calendar
+  position: relative
+  font-size: 12px
+  border-collapse: collapse
+  margin: 0
+  padding: 0
+  z-index: 4
+  border: 1px solid rgba(0, 0, 0, 0.08)
+  width: 270px !important
+  color: #000
+  text-align: center
+  background-color: #FFF
+  th, td
+    text-align: center
+    -webki-ttransition: all 0.3s ease
+    -moz-transition: all 0.3s ease
+    transition: all 0.3s ease
+    padding: 5px !important
+    vertical-align: middle
+  th:first-child, td:first-child
+    margin-left: 5px
+  .month
+    padding: 15px
+    display: inline-block
+  .pMDate, .nMDate
+    color: #c7c7c7
+  .date, .pMDate, .nMDate, .month
+    cursor: pointer
+  .date:hover, .pMDate:hover, .nMDate:hover, .month:hover
+    background-color: #fec601
+  .date:active, .pMDate:active, .nMDate:active, .month:active
+    background-color: #fec601
+    color: #FFF
+  .selected
+    background-color: #fec601 !important
+    color: #333 !important
+  tr:first-child th
+    background-color: #262626
+    padding: 4px
+    padding-top: 8px
+    font-size: 14px
+    color: #fff
+    cursor: pointer
+    font-family: montserrat
+    padding: 10px 0
+    text-transform: uppercase
+    letter-spacing: 1px
+    &:hover, &:active
+      color: #22A7F0
+  thead tr:nth-child(2) th
+    color: #333
+    font-size: 14px
+    font-weight: normal
+    padding: 8px 3px
+  #prev, #next
+    background: #333 none repeat scroll 0 0
+    font-size: 20px
+    line-height: 0
+    padding: 18px 0 22px !important
+  #today
+    text-align: center
+    cursor: pointer
+    color: #22A7F0
+    padding: 10px 6px
+    display: none
+    &:hover
+      color: #80A7DD
+    &:active
+      color: #000
+  #currDay
+    background: #fec601 none repeat scroll 0 0
+    color: #333
+
+/*.calendar span { padding: 6px 4px;  display: block; }
+
+.datepicker
+  background-size: contain
+
+.date > span, .nMDate > span, .pMDate > span
+  font-size: 14px
+
+.calender-icon
+  margin: 14px 0 0 -30px
+  position: absolute
+  .fa
+    color: #999999

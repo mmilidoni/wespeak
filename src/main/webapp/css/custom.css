@@ -1,0 +1,9 @@
+.login-home-page h1, .login-home-page h5 {
+    color: white;
+}
+.login-home-page img {
+	position: absolute; 
+	width:100%; 
+	display: block; 
+	z-index: -1;
+}
