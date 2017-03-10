@@ -12,3 +12,7 @@ List of timezones
 PasswordStorage
 ---------------
 [defuse/password-hashing (Github)](https://github.com/defuse/password-hashing)
+
+Calendar Module (customized)
+----------------------------
+[Event Calendar Design](http://bootsnipp.com/snippets/3qKZV)

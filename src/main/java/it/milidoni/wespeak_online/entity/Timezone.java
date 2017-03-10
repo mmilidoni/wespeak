@@ -16,23 +16,28 @@
 package it.milidoni.wespeak_online.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
 @Entity
+@Table(name = "timezone", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Timezone.findAll", query = "SELECT t FROM Timezone t"),
@@ -45,23 +50,18 @@ public class Timezone implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
-    @Column(nullable = false, length = 2)
     private String code21;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1024)
-    @Column(nullable = false, length = 1024)
     private String name;
-
-    /*
-    @OneToMany(mappedBy = "timezone")
+    @OneToMany(mappedBy = "timezone", fetch = FetchType.LAZY)
     private List<User> userList;
-     */
+
     public Timezone() {
     }
 
@@ -99,7 +99,6 @@ public class Timezone implements Serializable {
         this.name = name;
     }
 
-    /*
     @XmlTransient
     public List<User> getUserList() {
         return userList;
@@ -108,7 +107,7 @@ public class Timezone implements Serializable {
     public void setUserList(List<User> userList) {
         this.userList = userList;
     }
-     */
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -133,5 +132,5 @@ public class Timezone implements Serializable {
     public String toString() {
         return "it.milidoni.wespeak_online.entity.Timezone[ id=" + id + " ]";
     }
-
+    
 }

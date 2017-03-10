@@ -20,6 +20,7 @@ import it.milidoni.wespeak_online.entity.PhoneCall;
 import it.milidoni.wespeak_online.entity.User;
 import it.zenitlab.crudservice.CRUDService;
 import it.zenitlab.crudservice.exception.ServiceException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -41,6 +42,52 @@ public class PhoneCallService extends CRUDService {
 
     public PhoneCallService(EntityManager em) {
         super(em, PhoneCall.class);
+    }
+
+    public ArrayList<PhoneCall> list(Integer idUser, Date from, Date to) throws ServiceException {
+        if (from == null) {
+            throw new ServiceException("Please fill the start date");
+        }
+        if (to == null) {
+            throw new ServiceException("Please fill the end date");
+        }
+        if (from.after(to)) {
+            throw new ServiceException("The start date cannot follow the end date");
+        }
+        Query q = em.createQuery("SELECT p FROM PhoneCall p WHERE p.dateTime BETWEEN :from AND :to AND (p.owner.id = :idUser OR p.interlocutor.id = :idUser)");
+        q.setParameter("from", from);
+        q.setParameter("to", to);
+        q.setParameter("idUser", idUser);
+
+        return (ArrayList<PhoneCall>) q.getResultList();
+    }
+
+    public ArrayList<PhoneCall> listNext(Integer idUser) throws ServiceException {
+        Query q = em.createQuery("SELECT p "
+                + "FROM PhoneCall p "
+                + "WHERE p.dateTime >= :date "
+                + "AND (p.owner.id = :idUser OR p.interlocutor.id = :idUser) "
+                + "AND p.owner.id > 0 AND p.interlocutor.id > 0 "
+                + "ORDER BY p.dateTime ASC");
+        q.setParameter("idUser", idUser);
+        q.setParameter("date", new Date());
+        q.setMaxResults(6);
+        
+        return (ArrayList<PhoneCall>) q.getResultList();
+    }
+
+    public ArrayList<PhoneCall> listLast(Integer idUser) throws ServiceException {
+        Query q = em.createQuery("SELECT p "
+                + "FROM PhoneCall p "
+                + "WHERE p.dateTime < :date "
+                + "AND (p.owner.id = :idUser OR p.interlocutor.id = :idUser) "
+                + "AND p.owner.id > 0 AND p.interlocutor.id > 0 "
+                + "ORDER BY p.dateTime DESC");
+        q.setParameter("idUser", idUser);
+        q.setParameter("date", new Date());
+        q.setMaxResults(6);
+        
+        return (ArrayList<PhoneCall>) q.getResultList();
     }
 
     public PhoneCall activate(Integer idPhoneCall, Integer idOwner,

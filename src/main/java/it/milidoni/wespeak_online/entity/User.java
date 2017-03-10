@@ -19,8 +19,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,10 +33,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -45,8 +47,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
 @Entity
-@Table(name = "user", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"email"})})
+@Table(name="user", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
@@ -69,20 +70,16 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
     private Integer id;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1024)
-    @Column(nullable = false, length = 1024)
     private String email;
     @Size(max = 1024)
-    @Column(length = 1024)
     private String password;
     private Short newsletter;
     @Size(max = 1024)
-    @Column(length = 1024)
     private String name;
     private Integer rank;
     @Column(name = "english_level")
@@ -92,32 +89,28 @@ public class User implements Serializable {
     private Short sex;
     @Lob
     @Size(max = 65535)
-    @Column(length = 65535)
     private String about;
     @Size(max = 1024)
-    @Column(length = 1024)
     private String picture;
     @Size(max = 1024)
-    @Column(name = "skype_id", length = 1024)
+    @Column(name = "skype_id")
     private String skypeId;
     @Size(max = 45)
-    @Column(name = "reset_password_code", length = 45)
+    @Column(name = "reset_password_code")
     private String resetPasswordCode;
     private Integer country;
     @JoinTable(name = "favourite_user", joinColumns = {
-        @JoinColumn(name = "actor", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "subject", referencedColumnName = "id", nullable = false)})
-    @ManyToMany
+        @JoinColumn(name = "actor", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "subject", referencedColumnName = "id")})
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<User> userList;
-    @ManyToMany(mappedBy = "userList")
-    private List<User> userList1;
     @JoinTable(name = "favourite_topic", joinColumns = {
-        @JoinColumn(name = "user", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "topic", referencedColumnName = "id", nullable = false)})
-    @ManyToMany
+        @JoinColumn(name = "user", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "topic", referencedColumnName = "id")})
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Topic> topicList;
     @JoinColumn(name = "timezone", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Timezone timezone;
 
     public User() {
@@ -251,15 +244,6 @@ public class User implements Serializable {
 
     public void setFavouriteUsers(List<User> userList) {
         this.userList = userList;
-    }
-
-    @XmlTransient
-    public List<User> getUserList1() {
-        return userList1;
-    }
-
-    public void setUserList1(List<User> userList1) {
-        this.userList1 = userList1;
     }
 
     @XmlTransient

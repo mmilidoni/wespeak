@@ -42,31 +42,34 @@ public class UserService extends CRUDService {
     public UserService(EntityManager em) {
         super(em, User.class);
     }
-
+    
     public User getUser(String email, String password) throws ServiceException {
         Query q = em.createQuery("SELECT u FROM User u WHERE u.email = :email");
         q.setParameter("email", email);
-        User u = (User) q.getSingleResult();
-        if (u != null) {
-            try {
-                if (PasswordStorage.verifyPassword(password, u.getPassword())) {
-                    return u;
-                } else {
-                    return null;
-                }
-            } catch (PasswordStorage.CannotPerformOperationException ex) {
-                Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (PasswordStorage.InvalidHashException ex) {
-                Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
-                throw new ServiceException("Email o password non validi");
+        User u = null;
+        try {
+            u = (User) q.getSingleResult();
+        } catch (Exception e) {
+            throw new ServiceException("Email o password non validi");
+        }
+        try {
+            if (PasswordStorage.verifyPassword(password, u.getPassword())) {
+                return u;
+            } else {
+                return null;
             }
+        } catch (PasswordStorage.CannotPerformOperationException ex) {
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PasswordStorage.InvalidHashException ex) {
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServiceException("Email o password non validi");
         }
         return null;
     }
 
     public Boolean hasFavouriteUser(Integer idUserA, Integer idUserB) throws ServiceException {
         User u = read(idUserA);
-        if (u.getFavouriteUsers()== null) {
+        if (u.getFavouriteUsers() == null) {
             return false;
         }
         for (User subject : u.getFavouriteUsers()) {

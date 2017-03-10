@@ -22,6 +22,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,7 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
 @Entity
-@Table(uniqueConstraints = {
+@Table(schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"name"}),
     @UniqueConstraint(columnNames = {"code2l"}),
     @UniqueConstraint(columnNames = {"code3l"})})
@@ -64,45 +65,38 @@ public class Country implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(nullable = false)
     private boolean enabled;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 3)
-    @Column(nullable = false, length = 3)
     private String code3l;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
-    @Column(nullable = false, length = 2)
     private String code2l;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
-    @Column(nullable = false, length = 64)
     private String name;
     @Size(max = 128)
-    @Column(name = "name_official", length = 128)
+    @Column(name = "name_official")
     private String nameOfficial;
     @Size(max = 255)
-    @Column(name = "flag_32", length = 255)
+    @Column(name = "flag_32")
     private String flag32;
     @Size(max = 255)
-    @Column(name = "flag_128", length = 255)
+    @Column(name = "flag_128")
     private String flag128;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(precision = 10, scale = 8)
     private BigDecimal latitude;
-    @Column(precision = 11, scale = 8)
     private BigDecimal longitude;
     private Boolean zoom;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "countryId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "countryId", fetch = FetchType.LAZY)
     private List<CountryName> countryNameList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "countryId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "countryId", fetch = FetchType.LAZY)
     private List<CountryRegion> countryRegionList;
 
     public Country() {

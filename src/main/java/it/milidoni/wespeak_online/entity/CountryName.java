@@ -19,6 +19,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,8 +38,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
 @Entity
-@Table(name = "country_name", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"code2l", "language"})})
+@Table(name = "country_name", 
+        schema = "", uniqueConstraints = {
+            @UniqueConstraint(columnNames = {"code2l", "language"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CountryName.findAll", query = "SELECT c FROM CountryName c"),
@@ -54,29 +56,24 @@ public class CountryName implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
-    @Column(nullable = false, length = 2)
     private String code2l;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 5)
-    @Column(nullable = false, length = 5)
     private String language;
     @Size(max = 255)
-    @Column(length = 255)
     private String name;
     @Size(max = 255)
-    @Column(name = "name_official", length = 255)
+    @Column(name = "name_official")
     private String nameOfficial;
     @Size(max = 255)
-    @Column(length = 255)
     private String source;
-    @JoinColumn(name = "country_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "country_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Country countryId;
 
     public CountryName() {
@@ -172,5 +169,5 @@ public class CountryName implements Serializable {
     public String toString() {
         return "it.milidoni.wespeak_online.entity.CountryName[ id=" + id + " ]";
     }
-    
+
 }

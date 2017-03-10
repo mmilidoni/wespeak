@@ -2221,6 +2221,7 @@ header.is-fixed { position: fixed; }
 
 /**************************************************************************** 10. Footer  *************************************************************************************/
 
+/* footer { background: #262626 none repeat scroll 0 0; padding: 100px 0 0 0; } */
 footer { background: #262626 none repeat scroll 0 0; padding: 0px 0 0 0; }
 .footer-style-1{ padding: 0 0; background-color: #262626;}
 .footer-style-1 .bottom-footer{ margin: 0; }
@@ -2270,7 +2271,7 @@ footer ::-o-placeholder{ color: #808080; }
 .bottom-footer { 
 	clear: both;
   display: inline-block;
-  margin: 5px 0 0;
+  margin: 0px 0 0;
   padding: 20px 0 10px;
   width: 100%;
   background-color: #212121;
@@ -4828,7 +4829,7 @@ input[type="checkbox"], input[type="radio"] {
 input[type="radio"]:checked + .lbl::before {
   content: "•";
 }
- input[type="checkbox"] + .lbl.black::before, input[type="radio"] + .::before {
+ input[type="checkbox"] + .lbl.black::before, input[type="radio"] + ::before {
   margin-right: 0px;
 }
  input[type="checkbox"] + .lbl.yellow::before, input[type="radio"] + .lbl.yellow::before {
@@ -5830,7 +5831,7 @@ input[type="checkbox"]:checked + .lbl.filter-checkbox5::before {
 /******** 46.1 Call To Action style One ***********/
 
 .call-to-action{ text-align: center; }
-.call-to-action.style-one{ padding: 5px 0; }
+.call-to-action.style-one{ padding: 50px 0; }
 .call-to-action.style-one p{ color: #262626; font-size: 18px; padding: 20px 0 0; }
 .call-to-action h5 { padding: 12px 0 0; }
 .call-to-action.style-one.dark-grey-bg p{ color: #fff; }
@@ -6553,7 +6554,7 @@ blockquote .style-1 blockquote{padding: 20px 0 20px 30px;}
 /********** 50.2 Blogqoute Style Two ************/
 
 blockquote .style-2 i{float: left; color:#fbbc05;font-size: 30px; }
-blockquote .style-2 .block-content{padding: }
+
 blockquote .style-2 p
 {
     color: #333333;

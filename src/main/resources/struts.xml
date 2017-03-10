@@ -17,13 +17,59 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <struts>
-    <package name="default" extends="json-default">
-        <action name="angularAction" class="it.milidoni.wespeak_online.action.AngularAction">
-            <result type="json">
-                <param name="root">personData</param>
-                <param name="excludeNullProperties">true</param>
-                <param name="noCache">true</param>
+    <constant name="struts.action.extension" value=",,"/>
+
+    <package name="default" extends="json-default, struts-default">
+        <action name="home" class="it.milidoni.wespeak_online.action.HomeAction">
+            <result name="login">index.jsp</result>
+            <result name="userHome">/WEB-INF/userHome.jsp</result>
+        </action>
+        <action name="login" class="it.milidoni.wespeak_online.action.LoginAction">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="json">
+                <param name="enableSMD">true</param>
+            </interceptor-ref>
+            <result type="json" />
+        </action>
+        <action name="logout" class="it.milidoni.wespeak_online.action.LogoutAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">home</param>
             </result>
+        </action>  
+        <action name="404" class="it.milidoni.wespeak_online.action.BaseAction">
+            <result name="success">/error/404.jsp</result>
+        </action>      
+        <action name="listCalls" class="it.milidoni.wespeak_online.action.call.CallListAction">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="json">
+                <param name="enableSMD">true</param>
+            </interceptor-ref>
+            <result type="json">
+                <param name="root">events</param>
+            </result>
+        </action>
+        <action name="lastCalls" class="it.milidoni.wespeak_online.action.call.LastCallAction">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="json">
+                <param name="enableSMD">true</param>
+            </interceptor-ref>
+            <result type="json">
+                <param name="root">calls</param>
+            </result>
+        </action>
+        <action name="nextCalls" class="it.milidoni.wespeak_online.action.call.NextCallAction">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="json">
+                <param name="enableSMD">true</param>
+            </interceptor-ref>
+            <result type="json">
+                <param name="root">calls</param>
+            </result>
+        </action>
+    </package>
+    <package name="serveAll" namespace="" extends="struts-default">
+        <action name="*">
+            <result>/WEB-INF/error/404.jsp</result>
         </action>
     </package>
 </struts>

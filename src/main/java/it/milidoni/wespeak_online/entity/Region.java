@@ -21,12 +21,14 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -37,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
 @Entity
+@Table(name="region", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Region.findAll", query = "SELECT r FROM Region r"),
@@ -49,16 +52,14 @@ public class Region implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
     private Integer id;
     @Size(max = 32)
-    @Column(length = 32)
     private String name;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "is_unep", nullable = false)
+    @Column(name = "is_unep")
     private short isUnep;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "regionId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "regionId", fetch = FetchType.LAZY)
     private List<CountryRegion> countryRegionList;
 
     public Region() {

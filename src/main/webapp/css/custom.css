@@ -7,3 +7,7 @@
 	display: block; 
 	z-index: -1;
 }
+.post-image {
+    height: 80px;
+    width: 80px;
+}

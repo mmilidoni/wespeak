@@ -20,6 +20,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
 @Entity
-@Table(name = "phone_call")
+@Table(name = "phone_call", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhoneCall.findAll", query = "SELECT p FROM PhoneCall p"),
@@ -52,7 +52,6 @@ public class PhoneCall implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     private Integer id;
     @Column(name = "date_time")
     @Temporal(TemporalType.TIMESTAMP)
@@ -66,13 +65,13 @@ public class PhoneCall implements Serializable {
     @Column(name = "interlocutor_comment")
     private String interlocutorComment;
     @JoinColumn(name = "owner", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User owner;
     @JoinColumn(name = "interlocutor", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User interlocutor;
     @JoinColumn(name = "topic", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Topic topic;
 
     public PhoneCall() {

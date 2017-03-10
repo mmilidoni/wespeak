@@ -17,8 +17,8 @@ package it.milidoni.wespeak_online.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,6 +27,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -35,6 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Michele Milidoni <michelemilidoni@gmail.com>
  */
 @Entity
+@Table(name = "resource", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Resource.findAll", query = "SELECT r FROM Resource r"),
@@ -46,17 +48,14 @@ public class Resource implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
     private Integer id;
     @Size(max = 45)
-    @Column(length = 45)
     private String name;
     @Lob
     @Size(max = 65535)
-    @Column(length = 65535)
     private String uri;
-    @JoinColumn(name = "topic", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "topic", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Topic topic;
 
     public Resource() {
